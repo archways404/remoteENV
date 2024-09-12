@@ -17,38 +17,32 @@ struct EnvFile {
 }
 
 fn main() {
-    let matches = Command::new("My CLI App")
+    let matches = Command::new("rnv")
         .version("1.0")
         .author("Your Name <your.email@example.com>")
-        .about("A simple CLI tool in Rust")
-        .arg(
-            Arg::new("name")
-                .short('n')
-                .long("name")
-                .value_name("NAME")
-                .help("Sets the name to greet")
-                .required(false),
-        )
-        .arg(
-            Arg::new("debug")
-                .short('d')
-                .long("debug")
-                .help("Prints debug information")
-                .action(clap::ArgAction::SetTrue),
+        .about("A CLI tool for managing .env files")
+        .subcommand(
+            Command::new("init")
+                .about("Initialize by searching for .env files and saving contents to content.json"),
         )
         .get_matches();
 
-    // Get the current working directory
-    match env::current_dir() {
-        Ok(path) => {
-            println!("Current directory: {}", path.display());
-            let env_files = find_and_read_env_files(&path);
-            save_to_json("content.json", &env_files);
+    // Check if the "init" subcommand is invoked
+    if let Some(_) = matches.subcommand_matches("init") {
+        // Get the current working directory
+        match env::current_dir() {
+            Ok(path) => {
+                println!("Current directory: {}", path.display());
+                let env_files = find_and_read_env_files(&path);
+                save_to_json("content.json", &env_files);
+            }
+            Err(e) => {
+                eprintln!("Error getting current directory: {}", e);
+                process::exit(1);
+            }
         }
-        Err(e) => {
-            eprintln!("Error getting current directory: {}", e);
-            process::exit(1);
-        }
+    } else {
+        println!("Usage: rnv init");
     }
 }
 

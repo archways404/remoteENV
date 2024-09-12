@@ -1,7 +1,13 @@
 [package]
 name = "remoteENV"
 version = "0.0.1"
+authors = ["archways404 <archways@gmx.us>"]
 edition = "2021"
+
+# Add this section
+[[bin]]
+name = "rnv"
+path = "src/main.rs"
 
 [dependencies]
 clap = { version = "4.0", features = ["derive"] }
