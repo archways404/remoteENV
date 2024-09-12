@@ -20,3 +20,4 @@ Cargo.lock
 test/.env
 test/.env.tests
 .env
+dotenv/.env.example

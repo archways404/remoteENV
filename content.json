@@ -1,17 +1,23 @@
 [
   {
-    "name": ".env",
-    "path": "/Users/archways404/Developer/remoteENV/test/.env",
-    "contents": "test223"
+    "file_name": ".env",
+    "relative_file_path": "/C/Users/archways/Documents/GitHub/remoteENV/.env",
+    "project_name": "remoteENV",
+    "project_path": "/C/Users/archways/Documents/GitHub/remoteENV",
+    "contents": "PATH=\".env\""
   },
   {
-    "name": ".env.tests",
-    "path": "/Users/archways404/Developer/remoteENV/test/.env.tests",
-    "contents": "testenv"
+    "file_name": ".env",
+    "relative_file_path": "/C/Users/archways/Documents/GitHub/remoteENV/dotenv/.env",
+    "project_name": "dotenv",
+    "project_path": "/C/Users/archways/Documents/GitHub/remoteENV/dotenv",
+    "contents": "PATH=\"dotenv/.env\""
   },
   {
-    "name": ".env",
-    "path": "/Users/archways404/Developer/remoteENV/.env",
-    "contents": "testtee"
+    "file_name": ".env.example",
+    "relative_file_path": "/C/Users/archways/Documents/GitHub/remoteENV/dotenv/.env.example",
+    "project_name": "dotenv",
+    "project_path": "/C/Users/archways/Documents/GitHub/remoteENV/dotenv",
+    "contents": "PATH=\"dotenv/.env.example\""
   }
 ]
