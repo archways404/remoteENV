@@ -1,7 +1,20 @@
 use clap::{Arg, Command};
+use serde::Serialize;
 use std::env;
+use std::fs;
+use std::path::Path;
 use std::process;
-use walkdir::WalkDir; // Import walkdir for recursive directory traversal
+use walkdir::WalkDir;
+use std::fs::File;
+use std::io::Write;
+
+// Structure to hold the information for each .env file
+#[derive(Serialize)]
+struct EnvFile {
+    name: String,
+    path: String,
+    contents: String,
+}
 
 fn main() {
     let matches = Command::new("My CLI App")
@@ -25,23 +38,12 @@ fn main() {
         )
         .get_matches();
 
-    // Get the value of the "name" argument using get_one::<String>()
-    if let Some(name) = matches.get_one::<String>("name") {
-        println!("Hello, {}!", name);
-    } else {
-        println!("Hello, world!");
-    }
-
-    // Check if the "debug" flag is set using get_flag()
-    if matches.get_flag("debug") {
-        println!("Debug mode is ON");
-    }
-
     // Get the current working directory
     match env::current_dir() {
         Ok(path) => {
             println!("Current directory: {}", path.display());
-            find_all_env_files(&path);
+            let env_files = find_and_read_env_files(&path);
+            save_to_json("content.json", &env_files);
         }
         Err(e) => {
             eprintln!("Error getting current directory: {}", e);
@@ -50,9 +52,9 @@ fn main() {
     }
 }
 
-// Function to find and print all .env files in the current directory and subdirectories
-fn find_all_env_files(dir: &std::path::Path) {
-    let mut found = false;
+// Function to find and read all .env files, returning a Vec<EnvFile>
+fn find_and_read_env_files(dir: &Path) -> Vec<EnvFile> {
+    let mut env_files = Vec::new();
 
     // Use walkdir to recursively go through all directories and files
     for entry in WalkDir::new(dir).into_iter().filter_map(|e| e.ok()) {
@@ -61,13 +63,46 @@ fn find_all_env_files(dir: &std::path::Path) {
             // Check if the file is named exactly ".env" or has a ".env" extension
             let file_name = path.file_name().unwrap().to_str().unwrap();
             if file_name == ".env" || file_name.starts_with(".env") {
-                println!("Found .env file: {}", path.display());
-                found = true;
+                // Read the file contents
+                match fs::read_to_string(path) {
+                    Ok(contents) => {
+                        let env_file = EnvFile {
+                            name: file_name.to_string(),
+                            path: path.display().to_string(),
+                            contents: contents.trim().to_string(),
+                        };
+                        env_files.push(env_file);
+                    }
+                    Err(e) => {
+                        eprintln!("Failed to read {}: {}", path.display(), e);
+                    }
+                }
             }
         }
     }
 
-    if !found {
-        println!("No .env files found in the current directory and subdirectories.");
+    env_files
+}
+
+// Function to save the Vec<EnvFile> to a JSON file
+fn save_to_json(filename: &str, data: &[EnvFile]) {
+    match File::create(filename) {
+        Ok(mut file) => {
+            match serde_json::to_string_pretty(&data) {
+                Ok(json_data) => {
+                    if let Err(e) = file.write_all(json_data.as_bytes()) {
+                        eprintln!("Failed to write to {}: {}", filename, e);
+                    } else {
+                        println!("Data successfully saved to {}", filename);
+                    }
+                }
+                Err(e) => {
+                    eprintln!("Failed to serialize data: {}", e);
+                }
+            }
+        }
+        Err(e) => {
+            eprintln!("Failed to create file {}: {}", filename, e);
+        }
     }
 }

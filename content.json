@@ -1,0 +1,17 @@
+[
+  {
+    "name": ".env",
+    "path": "/Users/archways404/Developer/remoteENV/test/.env",
+    "contents": "test223"
+  },
+  {
+    "name": ".env.tests",
+    "path": "/Users/archways404/Developer/remoteENV/test/.env.tests",
+    "contents": "testenv"
+  },
+  {
+    "name": ".env",
+    "path": "/Users/archways404/Developer/remoteENV/.env",
+    "contents": "testtee"
+  }
+]
