@@ -1,0 +1,39 @@
+USERS:
+
+user_id SERIAL PRIMARY KEY,          -- Unique user ID
+username VARCHAR(255) UNIQUE,        -- Username (must be unique)
+email VARCHAR(255) UNIQUE,           -- Email (must be unique)
+password VARCHAR(255),               -- Hashed password
+created_at TIMESTAMP DEFAULT NOW(),  -- User account creation timestamp
+reset_token VARCHAR(255) UNIQUE,     -- Password reset token (must be unique)
+reset_token_expiration TIMESTAMP,    -- Expiration timestamp for password reset token
+is_verified BOOLEAN DEFAULT FALSE,   -- Email verified status (optional for registration flows)
+last_login TIMESTAMP                 -- Last login timestamp (for tracking)
+
+
+KEYS:
+
+key_id SERIAL PRIMARY KEY,                 -- Unique key ID
+owner_id INT REFERENCES users(user_id),    -- User ID that owns the key
+user_id INT REFERENCES users(user_id),     -- User ID that the key is associated with
+enc_key VARCHAR(255),                      -- Key value
+project_name VARCHAR(255),                 -- Project name
+created_at TIMESTAMP DEFAULT NOW(),        -- Timestamp of when the key was created
+updated_at TIMESTAMP DEFAULT NOW()         -- Timestamp of last key update (useful for tracking key rotation)
+
+
+RECOVERY_KEYS:
+
+key_id SERIAL PRIMARY KEY,                 -- Unique key ID
+owner_id INT REFERENCES users(user_id),    -- User ID that owns the key
+user_id INT REFERENCES users(user_id),     -- User ID that the key is associated with
+enc_key VARCHAR(255),                      -- Key value
+project_name VARCHAR(255),                 -- Project name
+created_at TIMESTAMP DEFAULT NOW(),        -- Timestamp of when the key was created
+updated_at TIMESTAMP DEFAULT NOW()         -- Timestamp of last key update (useful for tracking key rotation)
+
+-- THESE KEYS ARE ENCRYPTED WITH THE USER'S RECOVERY_KEY
+
+
+
+-- example KEY: key_encrypted BYTEA, -- Encrypted project key (encrypted with password-derived key)

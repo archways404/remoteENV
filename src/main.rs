@@ -2,10 +2,11 @@ mod login;
 mod register;
 mod files;
 
-use clap::{Arg, Command};
+// use clap::{Arg, Command};
+use clap::Command;
 use std::env;
 use std::process;
-use std::io::Write; // Add this line
+use std::io::Write;
 
 
 fn main() {
@@ -62,7 +63,7 @@ fn main() {
 // Prompt for user input
 fn prompt_for_input(prompt: &str) -> String {
     print!("{}", prompt);
-    std::io::stdout().flush().unwrap(); // Ensure the prompt is displayed before input
+    std::io::stdout().flush().unwrap();
     let mut input = String::new();
     std::io::stdin().read_line(&mut input).expect("Failed to read input");
     input.trim().to_string()
