@@ -1,7 +1,8 @@
-pub fn register(username: &str, password: &str, hexkey: &str) {
+#[allow(unused_variables)]
+pub fn register(email: &str, password: &str) {
     println!(
-        "Registering with username: {}, password: [REDACTED], hexkey: [REDACTED]",
-        username
+        "Creating an account for {} ",
+        email
     );
     // Implement actual register logic here
 }

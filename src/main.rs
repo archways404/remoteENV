@@ -44,17 +44,16 @@ fn main() {
     }
     // Handle the "login" subcommand
     else if let Some(_) = matches.subcommand_matches("login") {
-        let username = prompt_for_input("Enter your username: ");
+        let email = prompt_for_input("Enter your email: ");
         let password = prompt_for_secure_input("Enter your password: ");
-        let hexkey = prompt_for_secure_input("Enter your hexkey: ");
-        login::login(&username, &password, &hexkey);
+        login::login(&email, &password);
     }
     // Handle the "register" subcommand
     else if let Some(_) = matches.subcommand_matches("register") {
-        let username = prompt_for_input("Enter your username: ");
+        let email = prompt_for_secure_input("Enter your email: ");
         let password = prompt_for_secure_input("Enter your password: ");
-        let hexkey = prompt_for_secure_input("Enter your hexkey: ");
-        register::register(&username, &password, &hexkey);
+        
+        register::register(&email, &password);
     } else {
         println!("Usage: rnv <command>");
     }
